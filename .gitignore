@@ -1,0 +1,5 @@
+# Excluded files/folders
+obj
+mysort.exe
+files/*.ans
+.vscode

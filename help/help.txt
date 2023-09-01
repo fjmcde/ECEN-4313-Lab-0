@@ -1,0 +1,20 @@
+
+mysort syntax:
+mysort [--name] [-i sourcefile.txt] [-o outfile.txt] [--alg=<merge, quick>]
+
+--name:
+    Prints author's name
+
+-i:
+    Input text file containing the values to sort
+
+-o:
+    Output file to write out the sorted values
+
+--alg
+    Algorithm to use
+        =merge:
+            Use the merge sort algorithm
+        =quick
+            Use the quicksort algorithm
+        
