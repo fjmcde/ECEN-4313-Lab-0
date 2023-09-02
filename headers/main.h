@@ -197,41 +197,27 @@ int unknownOption(void)
 }
 
 
-int partitionVector(std::vector<int>& masterVector, int startIndex, int endIndex)
+int partitionVector(std::vector<int>& subVector, int startIndex, int endIndex)
 {
+    // Set the pivot value and pivot index
+    int pivotValue = subVector[endIndex];
+    int pivotIndex = startIndex;
 
-    int count = 0;
-    int pivotValue = masterVector[startIndex];
-    
-    for(int i = startIndex + 1; i <= endIndex; i++)
+    // Iterate though and partition the vector into left and right
+    // partitions. The left partition contains all values that are 
+    // less-than or equal-to the pivot value. The right partition
+    // contains all values that are greater-than the pivor value.
+    for(int i = startIndex; i < endIndex; i++)
     {
-        if(masterVector[i] <= pivotValue)
+        if(subVector[i] <= pivotValue)
         {
-            count++;
+            std::swap(subVector[i], subVector[pivotIndex]);
+            pivotIndex++;
         }
     }
 
-    int pivotIndex = startIndex + count;
-    std::swap(masterVector[pivotIndex], masterVector[startIndex]);
-
-    int i = startIndex, j = endIndex;
-    while(i < pivotIndex && j > pivotIndex)
-    {
-        while(masterVector[i] <= pivotValue)
-        {
-            i++;
-        }
-
-        while(masterVector[j] > pivotValue)
-        {
-            j--;
-        }
-
-        if(i < pivotIndex && j > pivotIndex)
-        {
-            std::swap(masterVector[i++], masterVector[j--]);
-        }
-    }
+    // Place the pivot element in the correct sorted position
+    std::swap(subVector[endIndex], subVector[pivotIndex]);
 
     return pivotIndex;
 }
@@ -249,7 +235,6 @@ void quickSort(std::vector<int>& vector, int startIndex, int endIndex)
     int pivotIndex = partitionVector(vector, startIndex, endIndex);
     quickSort(vector, startIndex, pivotIndex - 1);
     quickSort(vector, pivotIndex + 1, endIndex);
-
 }
 
 
@@ -257,7 +242,8 @@ void merge(std::vector<int>& masterVector, size_t start, size_t middle, size_t e
 {
     // Create sub-vectors using std::vector's range constructor
     // NOTE: vector.begin() returns an iterator which points to the first element
-    //       in the vector. The range is [start, end)
+    //       in the vector. The range is [start, end), hence we need to +1 to 
+    //       the endpoint to make it inclusive.
     // See (3): https://cplusplus.com/reference/vector/vector/vector/
     std::vector<int> leftSubVector(masterVector.begin() + start, masterVector.begin() + middle + 1);
     std::vector<int> rightSubVector(masterVector.begin() + middle + 1, masterVector.begin() + end + 1);
@@ -275,31 +261,31 @@ void merge(std::vector<int>& masterVector, size_t start, size_t middle, size_t e
     {
         if(leftSubVector[leftIndex] <= rightSubVector[rightIndex])
         {
-            masterVector[masterIndex] = leftSubVector[leftIndex];
-            leftIndex++;
+            masterVector[masterIndex] = leftSubVector[leftIndex++];
         }
         else
         {
-            masterVector[masterIndex] = rightSubVector[rightIndex];
-            rightIndex++;
+            masterVector[masterIndex] = rightSubVector[rightIndex++];
         }
 
         masterIndex++;
     }
 
+    // Since the while loop iterates until one of the sub-vectors
+    // merges all of it's elements; the other sub-vector will have
+    // at least one (and potentially more) unmerged element(s).
+
     // Merge in any remaining indexes of the left sub-vector
     for( ; leftIndex < leftSubVector.size(); leftIndex++)
     {
-        masterVector[masterIndex] = leftSubVector[leftIndex];
-        masterIndex++;
+        masterVector[masterIndex++] = leftSubVector[leftIndex];
     }
 
 
     // Merge in any remaining indexes of the right sub-vector
     for( ; rightIndex < rightSubVector.size(); rightIndex++)
     {
-        masterVector[masterIndex] = rightSubVector[rightIndex];
-        masterIndex++;
+        masterVector[masterIndex++] = rightSubVector[rightIndex];
     }
 }
 
