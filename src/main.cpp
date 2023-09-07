@@ -1,5 +1,6 @@
 #include "../headers/main.h"
 
+/* Main Driver code */
 int main(int argc, char* argv[])
 {
     // Validate number of command-line arguments

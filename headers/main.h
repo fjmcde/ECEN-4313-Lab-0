@@ -51,7 +51,10 @@ int unknownOption(void);
  *      Enumerations        *
  ****************************/
 
-/* Enumerations */
+/** 
+ * @brief Enumerated error codes.
+ * @details An errorCode <= 0 is not an actual error, handle accordingly 
+ **/
 enum errorCodes
 {
     noErrorHelp         = -2,   /* No Error: Help requested */
@@ -69,7 +72,21 @@ enum errorCodes
  *      Function Definitions     *
  *********************************/
 
-
+/** 
+ * @brief Function to parse command-line arguments and options 
+ * @param argc
+ *      Argument count
+ * @param argv 
+ *      Argument vector
+ * @param inFile 
+ *      Input file stream object
+ * @param outFile
+ *      Output file stream object
+ * @param algorithm 
+ *      String to determine which sorting algorithm to call
+ * @return
+ *      Returns an enumerated error code (see errorCodes enumeration)
+ **/ 
 int parseCMD(int argc, char* argv[], std::string* inFile, 
             std::string* outFile, std::string* algorithm)
 {
@@ -145,6 +162,14 @@ int parseCMD(int argc, char* argv[], std::string* inFile,
 }
 
 
+/** 
+ * @brief Given an input file stream an vector object, this function will
+ *           read each line of the file and store them as vector elements 
+ * @param inputFile
+ *      Reference to std::ifstream object for the input file to read in
+ * @param values
+ *      Reference to std::vector object to store each line of the input file 
+ **/ 
 void parseInputFIle(std::ifstream& inputFile, std::vector<int>& values)
  {
     std::string line;
@@ -156,6 +181,13 @@ void parseInputFIle(std::ifstream& inputFile, std::vector<int>& values)
  }
 
 
+/**
+ * @brief Print's the authors name
+ * 
+ * @details The author's name is set by the AUTHOR_NAME macro
+ * 
+ * @return Return no error
+ **/
 int printName(void)
 {
     std::cout << AUTHOR_NAME;
@@ -163,6 +195,11 @@ int printName(void)
 }
 
 
+/** 
+ * @brief  Prints the help file
+ * 
+ * @return Returns an error if 
+ **/
 int mySortHelp(void)
 {
     // Open the help file
@@ -190,6 +227,11 @@ int mySortHelp(void)
 }
 
 
+/**
+ * @brief Prints the unknown option mesage
+ * 
+ * @return An error code
+ **/
 int unknownOption(void)
 {
     std::cout << UNKNOWN_OPTION_MSG;
@@ -197,6 +239,17 @@ int unknownOption(void)
 }
 
 
+/**
+ * @brief Helper function for the quickSort function
+ * 
+ * @param subVector 
+ *      The sub-vector to partition
+ * @param startIndex
+ *      The starting index of the sub-vector
+ * @param endIndex 
+ *      The ending index of the sub-vector
+ * @return An error code 
+ **/
 int partitionVector(std::vector<int>& subVector, int startIndex, int endIndex)
 {
     // Set the pivot value and pivot index
@@ -223,6 +276,17 @@ int partitionVector(std::vector<int>& subVector, int startIndex, int endIndex)
 }
 
 
+/**
+ * @brief Recursive QuickSort algorithm
+ * 
+ * @param vector
+ *      Vector data to sort
+ * @param startIndex 
+ *      Starting index to sort from
+ * @param endIndex 
+ *      Ending index to sort up through
+ * @return void
+ **/
 void quickSort(std::vector<int>& vector, int startIndex, int endIndex)
 {
     // Base case to break recursion
@@ -238,6 +302,19 @@ void quickSort(std::vector<int>& vector, int startIndex, int endIndex)
 }
 
 
+/**
+ * @brief Helper function for mergeSort
+ * 
+ * @param masterVector
+ *      The vector containing all of the data to sort
+ * @param start
+ *      The starting index which defines the left endpoint of the left sub-vector
+ * @param middle
+ *      The middle index which defines an endpoint of the sub-vectors
+ * @param end 
+ *      THe ending index which defines the right endpoint of the right sub-vector
+ * @return void
+ **/
 void merge(std::vector<int>& masterVector, size_t start, size_t middle, size_t end)
 {
     // Create sub-vectors using std::vector's range constructor
@@ -290,6 +367,17 @@ void merge(std::vector<int>& masterVector, size_t start, size_t middle, size_t e
 }
 
 
+/**
+ * @brief Recursive MergeSort algorithm
+ * 
+ * @param vector
+ *      The vector containing data to sort
+ * @param startIndex
+ *      The starting index to sort from
+ * @param endIndex 
+ *      The ending index to sort through
+ * @return void 
+ **/
 void mergeSort(std::vector<int>& vector, size_t startIndex, size_t endIndex)
 {
     // Base case to break recursion
@@ -323,6 +411,15 @@ void sort(std::string algorithm, std::vector<int>& values)
 }
 
 
+/**
+ * @brief Writes the sorted vector to a file
+ * 
+ * @param outFile
+ *      A std::ofstream object to write sorted vector data to
+ * @param values
+ *      Sorted vector data
+ * @return void 
+ **/
 void writeOutSortedToFile(std::ofstream& outFile, std::vector<int> values)
 {
     for(size_t i = 0; i < values.size(); i++)
